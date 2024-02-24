@@ -1,0 +1,6 @@
+gensim==4.3.2
+pandas==2.2.1
+scikit-learn==1.4.0
+thefuzz[speedup]==0.22.1
+nltk==3.8.1
+pydantic==2.6.2
