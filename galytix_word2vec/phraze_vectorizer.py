@@ -7,7 +7,7 @@ class PhraseVectorizer:
         """
         Initialize the PhraseVectorizer.
 
-        :param word2vec: A dictionary or a KeyedVectors object containing word vectors.
+        :param word2vec: A dictionary or a KeyedVectors object containing word vectors.  # noqa: E501
         :param vector_dim: The dimension of the vectors in the word2vec model.
         """
         self.word2vec = word2vec
@@ -15,9 +15,9 @@ class PhraseVectorizer:
         self.cleaned_phrases = list(cleaned2org_phrase.keys())
         self.clean2orig_phrase = cleaned2org_phrase
 
-    def phrase_to_vector(self, phrase):
+    def phrase_to_vector(self, phrase: str) -> np.ndarray:
         """
-        Convert a phrase to a vector by averaging the vectors of the words in the phrase.
+        Convert a phrase to a vector by averaging the vectors of the words in the phrase.  # noqa: E501
 
         :param phrase: A string representing the phrase to be vectorized.
         :return: A numpy array representing the vectorized phrase.
@@ -32,11 +32,11 @@ class PhraseVectorizer:
         else:
             return np.zeros(self.vector_dim)
 
-    def precompute_phrase_vectors(self, phrases):
+    def precompute_phrase_vectors(self, phrases: list[str]) -> np.ndarray:
         """
         Precompute the vectors for a list of phrases.
 
-        :param phrases: A list of strings where each string is a phrase to be vectorized.
+        :param phrases: A list of strings where each string is a phrase to be vectorized.  # noqa: E501
         :return: A numpy array representing the vectors of the phrases.
         """
         phrase_vectors = []
@@ -45,7 +45,8 @@ class PhraseVectorizer:
             phrase_vector = self.phrase_to_vector(phrase)
             phrase_vectors.append(phrase_vector)
 
-        # Convert list of vectors to a numpy matrix for efficient similarity computation
+        # Convert list of vectors to a numpy matrix
+        # for efficient similarity computation
         phrase_vectors_matrix = np.array(phrase_vectors)
 
         return phrase_vectors_matrix
@@ -54,7 +55,7 @@ class PhraseVectorizer:
         self, phrase: str, phrase_vectors_matrix: np.ndarray
     ) -> [str, float]:
         """
-        Find the closest match to a given phrase in the precomputed phrase vectors.
+        Find the closest match to a given phrase in the precomputed phrase vectors.  # noqa: E501
 
         :param phrase: A string representing the phrase to be compared.
         :return: The closest match to the given phrase.
