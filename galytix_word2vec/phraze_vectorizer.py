@@ -1,17 +1,19 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 class PhraseVectorizer:
-    def __init__(self, word2vec: dict, vector_dim, phrases: list[str]):
+    def __init__(self, word2vec: dict, vector_dim, cleaned2org_phrase: dict):
         """
-        Initialize the PhraseVectorizer with a word2vec model.
-        
+        Initialize the PhraseVectorizer.
+
         :param word2vec: A dictionary or a KeyedVectors object containing word vectors.
         :param vector_dim: The dimension of the vectors in the word2vec model.
         """
         self.word2vec = word2vec
         self.vector_dim = vector_dim
-        self.phrases = phrases
+        self.cleaned_phrases = list(cleaned2org_phrase.keys())
+        self.clean2orig_phrase = cleaned2org_phrase
 
     def phrase_to_vector(self, phrase):
         """
@@ -21,13 +23,15 @@ class PhraseVectorizer:
         :return: A numpy array representing the vectorized phrase.
         """
         words = phrase.split()
-        word_vectors = np.array([self.word2vec[word] for word in words if word in self.word2vec])
+        word_vectors = np.array(
+            [self.word2vec[word] for word in words if word in self.word2vec]
+        )
 
         if len(word_vectors) > 0:
             return np.mean(word_vectors, axis=0)
         else:
             return np.zeros(self.vector_dim)
-    
+
     def precompute_phrase_vectors(self, phrases):
         """
         Precompute the vectors for a list of phrases.
@@ -45,8 +49,10 @@ class PhraseVectorizer:
         phrase_vectors_matrix = np.array(phrase_vectors)
 
         return phrase_vectors_matrix
-    
-    def get_the_closest(self, phrase, phrase_vectors_matrix):
+
+    def get_the_closest(
+        self, phrase: str, phrase_vectors_matrix: np.ndarray
+    ) -> [str, float]:
         """
         Find the closest match to a given phrase in the precomputed phrase vectors.
 
@@ -56,7 +62,8 @@ class PhraseVectorizer:
         vector = self.phrase_to_vector(phrase)
         similarity_scores = cosine_similarity([vector], phrase_vectors_matrix)
         closest_match_index = np.argmax(similarity_scores)
-        closest_match = self.phrases[closest_match_index]
+        closest_match = self.clean2orig_phrase[
+            self.cleaned_phrases[closest_match_index]
+        ]
 
-        return closest_match
-
+        return closest_match, similarity_scores[0][closest_match_index]

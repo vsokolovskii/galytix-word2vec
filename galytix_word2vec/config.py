@@ -1,16 +1,14 @@
 class Settings:
     app_name: str = "galytix_word2vec"
-
     # Paths
-    word2vec_path: str = (
-        "/Users/vladislav/Desktop/galytix-word2vec/GoogleNews-vectors-negative300.bin"  # TODO: Change this to the actual path
-    )
-    temp_vectors_path = "vectors.csv"
-    phrases_path: str = (
-        "/Users/vladislav/Desktop/galytix-word2vec/phrases.csv"  # TODO: Change this to the actual path
-    )
+    data_folder: str = "data"
+    word2vec_path: str = f"{data_folder}/GoogleNews-vectors-negative300.bin"
+    phrases_path: str = f"{data_folder}/phrases.csv"
+    temp_vectors_path = f"{data_folder}/vectors.csv"
 
     # Vectorization
     vector_dim: int = 300
+    skip_word2vec_if_exists: bool = True
+
 
 settings = Settings()
